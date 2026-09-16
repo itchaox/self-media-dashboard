@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>自媒体工具台</title>
+
+  <!-- Tailwind Play CDN：零构建、现代化样式 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="stylesheet" href="assets/css/common.css" />
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
+
+  <!-- ============ Hero 顶部 ============ -->
+  <header class="border-b border-slate-200/60 dark:border-slate-700/60">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex items-start justify-between gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-semibold text-slate-900 dark:text-slate-50 tracking-tight">
+          自媒体工具台
+        </h1>
+        <p class="mt-2 text-sm md:text-base text-slate-500 dark:text-slate-400">
+          个人独用的工具集合 —— 点开即用，离线可用。
+        </p>
+      </div>
+
+      <!-- 主题切换按钮 -->
+      <button
+        data-theme-toggle
+        aria-label="切换暗色模式"
+        class="theme-toggle-icon shrink-0 rounded-xl p-2.5 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
+        title="切换主题"
+      >
+        <!-- 浅色模式时显示月亮（点击切换到暗色） -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm5.657 2.343a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM18 9a1 1 0 110 2h-1a1 1 0 110-2h1zM4 9a1 1 0 010 2H3a1 1 0 010-2h1zm1.343-5.657a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM10 6a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        <!-- 暗色模式时显示太阳（点击切换到浅色） -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block dark:hidden" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ 工具卡片网格 ============ -->
+  <main class="max-w-6xl mx-auto px-6 py-10">
+
+    <!-- 添加工具的提示（首次看到时方便上手） -->
+    <div class="mb-8 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 px-5 py-4 text-sm text-indigo-700 dark:text-indigo-300">
+      <span class="font-medium">如何添加新工具？</span>
+      在 <code class="font-mono px-1.5 py-0.5 rounded bg-white/60 dark:bg-slate-800/60">tools/</code> 下创建新 HTML 文件，然后在下方网格里复制一张卡片修改即可。详见
+      <a href="README.md" class="underline underline-offset-2 hover:text-indigo-900 dark:hover:text-indigo-100">README</a>。
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+      <!-- ============ 空行去除器 ============ -->
+      <a href="tools/blank-line-remover.html"
+         data-tool-id="blank-line-remover"
+         class="tool-card group block rounded-2xl bg-white dark:bg-slate-800 p-5 shadow-sm hover:shadow-lg border border-slate-200/60 dark:border-slate-700/60">
+        <div class="flex items-center justify-center w-11 h-11 rounded-xl bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-300 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-slate-900 dark:text-slate-50 mb-1">空行去除器</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">清理 Markdown 多余空行，自动规范化格式，支持快捷键与一键复制。</p>
+      </a>
+
+      <!-- 添加新卡片：复制上面 tool-card 的 <a>...</a> 整块，修改 href、data-tool-id、图标、名称、描述即可 -->
+
+    </div>
+
+    <!-- 当网格为空时显示（隐藏状态：删掉示例后启用） -->
+    <!--
+    <div class="rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 p-12 text-center">
+      <p class="text-slate-500 dark:text-slate-400">还没有工具，去 <code>tools/</code> 下创建第一个吧。</p>
+    </div>
+    -->
+  </main>
+
+  <!-- ============ 页脚 ============ -->
+  <footer class="border-t border-slate-200/60 dark:border-slate-700/60 mt-12">
+    <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400 dark:text-slate-500">
+      <span>本地工具台 · 不上传任何数据</span>
+      <span>
+        快捷键提示：在工具页按
+        <kbd class="font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">⌥ + ←</kbd>
+        返回工作台（浏览器历史）
+      </span>
+    </div>
+  </footer>
+
+  <script src="assets/js/common.js"></script>
+</body>
+</html>

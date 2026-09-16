@@ -1,0 +1,53 @@
+# 自媒体工具台（self-media-dashboard）
+
+一个个人独用的工具导航台 —— 一个 HTML 首页，里面有几个按钮，点击跳转到不同的工具页面。
+
+## 怎么打开
+
+直接双击 [index.html](index.html)，浏览器打开就能用。**无需安装任何依赖、无需启动服务**。
+
+> 首次打开时会从 CDN 加载 Tailwind（用于样式），浏览器会自动缓存。后续离线也能用。
+
+## 怎么添加新工具
+
+1. 在 `tools/` 下创建 `my-tool.html`，可以从零开始，也可以参考 [`tools/blank-line-remover.html`](tools/blank-line-remover.html) 的结构
+2. 打开 [index.html](index.html)，在卡片网格里复制一份现有卡片，修改：
+   - `href`（指向新工具页）
+   - 名称
+   - 描述
+   - 图标 SVG（可选）
+3. （可选）在新卡片上加 `data-tool-id="my-tool"`，"最近使用"角标会自动生效
+
+**就这样，没有别的步骤。**
+
+## 目录结构
+
+```
+self-media-dashboard/
+├── index.html               # 工作台首页（唯一入口）
+├── README.md                # 本文件
+├── assets/
+│   ├── css/common.css       # 共享样式
+│   └── js/common.js         # 共享脚本（最近使用、暗色模式）
+└── tools/
+    └── blank-line-remover.html  # 空行去除器
+```
+
+> 文件名以 `_` 开头的会被视为模板/示例，**不会**当作真实工具展示在工作台首页。
+
+## 视觉规范
+
+| 项 | 取值 |
+|---|---|
+| 字体 | 系统字体栈（macOS 原生 SF） |
+| 主色 | `indigo-500` (#6366f1) |
+| 强调色 | `amber-400` (#fbbf24)，用于"最近使用"角标 |
+| 圆角 | `rounded-2xl` (1rem) |
+| 图标 | 内联 SVG（Heroicons 风格），不依赖外部 CDN |
+| 暗色模式 | 默认跟随系统，右上角按钮可手动切换 |
+
+## 调试
+
+- macOS Safari / Chrome：菜单 → "显示开发工具" 或 `⌘ + ⌥ + I`
+- 修改 `index.html` 或 `tools/*.html` 后，浏览器刷新即可看到变化（无需重启服务）
+- 想清空"最近使用"记录：在浏览器控制台执行 `localStorage.removeItem('smd.recent')`

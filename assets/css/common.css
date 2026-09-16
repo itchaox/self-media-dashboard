@@ -1,0 +1,81 @@
+/* ============================================================
+ * 自媒体工具台 · 共享样式
+ * 仅放无法用 Tailwind utility 表达的：CSS 变量、字体栈、过渡、滚动条
+ * ============================================================ */
+
+:root {
+  --smd-radius: 1rem;
+  --smd-radius-lg: 1.25rem;
+  --smd-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --smd-shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+  --smd-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 暗色模式下的滚动条 */
+html.dark body {
+  color-scheme: dark;
+}
+
+/* 通用过渡：卡片、按钮 hover 时使用 */
+.tool-card,
+.tool-card * {
+  transition: transform 200ms var(--smd-ease),
+              box-shadow 200ms var(--smd-ease),
+              background-color 200ms var(--smd-ease);
+}
+
+.tool-card:hover {
+  transform: translateY(-2px);
+}
+
+/* "最近使用"角标位置 */
+.tool-card {
+  position: relative;
+}
+
+.tool-card .recent-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: #fbbf24;
+  color: #78350f;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  box-shadow: var(--smd-shadow-sm);
+}
+
+/* 滚动条美化（仅 WebKit / macOS Safari/Chrome） */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(0 0 0 / 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(0 0 0 / 0.3);
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 0.15);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgb(255 255 255 / 0.3);
+}
+
+/* 主题切换按钮旋转动画 */
+.theme-toggle-icon {
+  transition: transform 300ms var(--smd-ease);
+}
+.theme-toggle-icon:hover {
+  transform: rotate(15deg);
+}

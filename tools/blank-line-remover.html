@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>空行去除器 · 自媒体工具台</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- 工作台共享样式 + 主题 CSS 变量（不影响本页原有样式） -->
+    <link rel="stylesheet" href="../assets/css/common.css" />
+    <style>
+      :root {
+        --bg-start: #1a1f3a;
+        --bg-end: #0f1419;
+        --primary: #8b5cf6;
+        --primary-hover: #7c3aed;
+        --border: rgba(139, 92, 246, 0.3);
+        --text-main: #f3f4f6;
+        --text-muted: #9ca3af;
+        --glass-bg: rgba(30, 30, 40, 0.6);
+        --glass-bg-hover: rgba(40, 40, 50, 0.7);
+        --panel-border-radius: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 2rem;
+      }
+
+      /* Glassmorphism utility */
+      .glass {
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border);
+        border-radius: var(--panel-border-radius);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      }
+
+      /* Header */
+      header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(to right, #fff, var(--primary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+      }
+
+      header p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+      }
+
+      /* Main Workspace */
+      .workspace {
+        display: flex;
+        flex: 1;
+        gap: 1.5rem;
+        max-width: 1400px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: border-color 0.3s ease;
+      }
+
+      .panel:focus-within {
+        /* border-color: var(--primary); */
+        /* box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.2); */
+      }
+
+      .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: #d1d5db;
+      }
+
+      textarea {
+        flex: 1;
+        width: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--text-main);
+        padding: 1.5rem;
+        font-family: 'Fira Code', Consolas, Monaco, monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        resize: none;
+      }
+
+      textarea::placeholder {
+        color: rgba(156, 163, 175, 0.5);
+      }
+
+      /* Custom Scrollbar */
+      textarea::-webkit-scrollbar {
+        width: 10px;
+      }
+      textarea::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      textarea::-webkit-scrollbar-thumb {
+        background: rgba(139, 92, 246, 0.3);
+        border-radius: 5px;
+        border: 2px solid var(--glass-bg);
+      }
+      textarea::-webkit-scrollbar-thumb:hover {
+        background: rgba(139, 92, 246, 0.6);
+      }
+
+      /* Controls */
+      .controls {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 0 0.5rem;
+      }
+
+      .btn-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        outline: none;
+      }
+
+      .btn-circle.primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-circle.primary:hover {
+        background: var(--primary-hover);
+        transform: scale(1.1);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+      }
+
+      .btn-circle.primary:active {
+        transform: scale(0.95);
+      }
+
+      .btn-circle.secondary {
+        background: #374151;
+        color: #d1d5db;
+      }
+
+      .btn-circle.secondary:hover {
+        background: #4b5563;
+        color: white;
+        transform: scale(1.1);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+
+      .btn-small {
+        background: rgba(139, 92, 246, 0.15);
+        color: #e2e8f0;
+        border: 1px solid var(--border);
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-small:hover {
+        background: rgba(139, 92, 246, 0.3);
+        color: #fff;
+        transform: translateY(-1px);
+      }
+
+      /* Statistics */
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin: 2rem auto 0;
+        padding: 1.5rem 3rem;
+        max-width: fit-content;
+      }
+
+      .stat-box {
+        background: rgba(15, 20, 25, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1rem 2rem;
+        text-align: center;
+        min-width: 140px;
+        transition: transform 0.2s ease;
+      }
+
+      .stat-box:hover {
+        transform: translateY(-2px);
+        border-color: rgba(139, 92, 246, 0.2);
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-top: 8px;
+        font-family: 'Fira Code', monospace;
+        text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+      }
+
+      .stat-label {
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-20px);
+        background: rgba(30, 30, 40, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--primary);
+        color: #fff;
+        padding: 14px 28px;
+        border-radius: 50px;
+        font-size: 15px;
+        font-weight: 500;
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.3),
+          0 0 15px rgba(139, 92, 246, 0.2);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1000;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toast.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* Responsive */
+      @media (max-width: 900px) {
+        .workspace {
+          flex-direction: column;
+        }
+        .controls {
+          flex-direction: row;
+          padding: 0.5rem 0;
+        }
+        .panel {
+          min-height: 400px;
+        }
+        .stats {
+          flex-wrap: wrap;
+          gap: 1rem;
+          padding: 1.5rem;
+        }
+        .stat-box {
+          flex: 1 1 calc(50% - 1rem);
+          min-width: 120px;
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 工作台顶部导航：返回 / 工具名 / 主题切换 -->
+    <nav
+      style="
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 16px;
+        margin: -2rem -2rem 1.5rem;
+        background: rgba(15, 20, 25, 0.7);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+        <a
+          href="../index.html"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+          "
+          onmouseover="this.style.color='#8b5cf6'"
+          onmouseout="this.style.color='#9ca3af'"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          <span>返回工作台</span>
+        </a>
+        <span style="color: rgba(156, 163, 175, 0.4);">/</span>
+        <span
+          style="
+            font-size: 14px;
+            font-weight: 500;
+            color: #f3f4f6;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          "
+          >空行去除器</span
+        >
+      </div>
+      <button
+        data-theme-toggle
+        aria-label="切换主题"
+        title="切换主题"
+        class="theme-toggle-icon"
+        style="
+          background: rgba(139, 92, 246, 0.15);
+          border: 1px solid rgba(139, 92, 246, 0.3);
+          color: #e2e8f0;
+          border-radius: 8px;
+          padding: 4px 10px;
+          font-size: 14px;
+          cursor: pointer;
+          line-height: 1;
+        "
+      >
+        🌗
+      </button>
+    </nav>
+
+    <header>
+      <h1>✨ 空行去除器</h1>
+      <p>自动清理多余空行，规范化 Markdown 格式</p>
+    </header>
+
+    <main class="workspace">
+      <!-- 左侧输入面板 -->
+      <div class="panel glass">
+        <div class="panel-header">
+          <span>原始 Markdown</span>
+        </div>
+        <textarea
+          id="input"
+          placeholder="在此粘贴你的 Markdown 内容... (支持 Cmd/Ctrl + Enter 快速转换)"
+        ></textarea>
+      </div>
+
+      <!-- 中间控制区 -->
+      <div class="controls">
+        <button
+          class="btn-circle primary"
+          id="btn-convert"
+          title="一键转换 (Ctrl/Cmd + Enter)"
+        >
+          ⚡
+        </button>
+        <button
+          class="btn-circle secondary"
+          id="btn-clear"
+          title="清空所有内容"
+        >
+          🗑️
+        </button>
+      </div>
+
+      <!-- 右侧输出面板 -->
+      <div class="panel glass">
+        <div class="panel-header">
+          <span>优化结果</span>
+          <button
+            class="btn-small"
+            id="btn-copy"
+          >
+            复制代码
+          </button>
+        </div>
+        <textarea
+          id="output"
+          readonly
+          placeholder="优化后的内容将显示在这里..."
+        ></textarea>
+      </div>
+    </main>
+
+    <!-- 底部统计 -->
+    <footer class="stats glass">
+      <div class="stat-box">
+        <div class="stat-label">原始行数</div>
+        <div
+          class="stat-value"
+          id="stat-orig"
+        >
+          0
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">转换后行数</div>
+        <div
+          class="stat-value"
+          id="stat-opt"
+        >
+          0
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">压缩率</div>
+        <div
+          class="stat-value"
+          id="stat-comp"
+        >
+          0%
+        </div>
+      </div>
+    </footer>
+
+    <!-- Toast 通知 -->
+    <div
+      class="toast"
+      id="toast"
+    >
+      ✅ 转换成功并已复制到剪贴板
+    </div>
+
+    <script>
+      // DOM Elements
+      const inputEl = document.getElementById('input');
+      const outputEl = document.getElementById('output');
+      const btnConvert = document.getElementById('btn-convert');
+      const btnClear = document.getElementById('btn-clear');
+      const btnCopy = document.getElementById('btn-copy');
+      const statOrig = document.getElementById('stat-orig');
+      const statOpt = document.getElementById('stat-opt');
+      const statComp = document.getElementById('stat-comp');
+      const toastEl = document.getElementById('toast');
+
+      // State variables
+      let currentOutputText = '';
+      let toastTimeout;
+
+      // Core Algorithm
+      function optimizeMarkdown(text) {
+        // Unify line endings to \n
+        text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const lines = text.split('\n');
+        let result = [];
+        let inCodeBlock = false;
+
+        // Step 1: Format lines & handle code blocks
+        for (let i = 0; i < lines.length; i++) {
+          let line = lines[i];
+          // Check code block fence (allow indentation up to 3 spaces per commonmark)
+          const isCodeBlockBoundary = line.trimStart().startsWith('```');
+
+          if (isCodeBlockBoundary) {
+            if (!inCodeBlock) {
+              // Ensure blank line BEFORE opening code block
+              if (result.length > 0 && result[result.length - 1].trim() !== '') {
+                result.push('');
+              }
+              inCodeBlock = true;
+              result.push(line);
+            } else {
+              // Closing code block
+              inCodeBlock = false;
+              result.push(line);
+              // Ensure blank line AFTER closing code block
+              result.push('');
+            }
+            continue;
+          }
+
+          if (inCodeBlock) {
+            // Do not format content inside code block
+            result.push(line);
+            continue;
+          }
+
+          // --- Format Markdown Elements outside code blocks ---
+          line = line.trimEnd();
+
+          // Headers: Ensure space after #
+          line = line.replace(/^(#{1,6})(?!\s)(.*)/, '$1 $2');
+
+          // Unordered lists: Ensure space after -, *, +
+          line = line.replace(/^(\s*)([-*+])(?!\s)(.*)/, '$1$2 $3');
+
+          // Ordered lists: Ensure space after number.
+          line = line.replace(/^(\s*)(\d+\.)(?!\s)(.*)/, '$1$2 $3');
+
+          // Blockquotes: Ensure space after >
+          line = line.replace(/^(\s*)(>+)(?!\s)(.*)/, '$1$2 $3');
+
+          result.push(line);
+        }
+
+        // Step 2: Remove blank lines, but keep one blank line before lines starting with 【
+        let finalResult = [];
+
+        for (let i = 0; i < result.length; i++) {
+          let line = result[i];
+
+          // 跳过空行
+          if (line.trim() === '') {
+            continue;
+          }
+
+          // 如果当前行以【开头,且不是第一行,则在前面添加一个空行
+          if (line.trim().startsWith('【') && finalResult.length > 0) {
+            finalResult.push('');
+          }
+
+          finalResult.push(line);
+        }
+
+        // Remove trailing blank lines
+        while (finalResult.length > 0 && finalResult[finalResult.length - 1] === '') {
+          finalResult.pop();
+        }
+
+        // 在最顶部增加三个空行
+        return '\n\n\n' + finalResult.join('\n');
+      }
+
+      // Action Handlers
+      async function copyToClipboard(text) {
+        if (!text) return false;
+
+        // Try Modern Clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (err) {
+            console.warn('Clipboard API failed', err);
+          }
+        }
+
+        // Fallback to execCommand
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        let successful = false;
+        try {
+          successful = document.execCommand('copy');
+        } catch (err) {
+          console.error('Fallback copy failed', err);
+        }
+
+        document.body.removeChild(textArea);
+        return successful;
+      }
+
+      function showToast(message) {
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastEl.textContent = message;
+        toastEl.classList.add('show');
+
+        toastTimeout = setTimeout(() => {
+          toastEl.classList.remove('show');
+        }, 2500);
+      }
+
+      function updateStats(origText, optText) {
+        const getLineCount = (str) => (str.length === 0 ? 0 : str.split('\n').length);
+
+        const origCount = getLineCount(origText);
+        const optCount = getLineCount(optText);
+
+        statOrig.innerText = origCount;
+        statOpt.innerText = optCount;
+
+        let compRate = 0;
+        if (origCount > 0) {
+          compRate = ((origCount - optCount) / origCount) * 100;
+        }
+
+        // Determine sign prefix
+        const prefix = compRate > 0 ? '-' : compRate < 0 ? '+' : '';
+        statComp.innerText = prefix + Math.abs(compRate).toFixed(1) + '%';
+      }
+
+      function handleConvert() {
+        const rawText = inputEl.value;
+        if (!rawText.trim() && rawText.length === 0) {
+          showToast('⚠️ 请先输入 Markdown 内容');
+          return;
+        }
+
+        currentOutputText = optimizeMarkdown(rawText);
+        outputEl.value = currentOutputText;
+
+        updateStats(rawText, currentOutputText);
+
+        copyToClipboard(currentOutputText).then((success) => {
+          if (success) {
+            showToast('✅ 转换成功并已复制到剪贴板');
+          } else {
+            showToast('✅ 转换成功 (自动复制失败，请点击复制按钮)');
+          }
+        });
+      }
+
+      // Event Listeners
+      btnConvert.addEventListener('click', handleConvert);
+
+      btnClear.addEventListener('click', () => {
+        inputEl.value = '';
+        outputEl.value = '';
+        currentOutputText = '';
+        updateStats('', '');
+        showToast('🗑️ 内容已清空');
+      });
+
+      btnCopy.addEventListener('click', () => {
+        if (!currentOutputText) {
+          showToast('⚠️ 没有可复制的内容');
+          return;
+        }
+        copyToClipboard(currentOutputText).then((success) => {
+          if (success) showToast('✅ 已复制到剪贴板');
+          else showToast('❌ 复制失败，请手动选择复制');
+        });
+      });
+
+      // Keyboard Shortcut: Cmd/Ctrl + Enter
+      inputEl.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          handleConvert();
+        }
+      });
+
+      // Real-time original line count tracking
+      inputEl.addEventListener('input', (e) => {
+        const count = e.target.value.length === 0 ? 0 : e.target.value.split('\n').length;
+        statOrig.innerText = count;
+      });
+    </script>
+
+    <!-- 工作台共享脚本：负责"最近使用"追踪与主题同步 -->
+    <script src="../assets/js/common.js"></script>
+  </body>
+</html>
