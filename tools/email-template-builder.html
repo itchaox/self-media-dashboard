@@ -207,27 +207,9 @@
         <!-- 实时预览（可编辑：用户可微调，标记为脱离后产品名变化不再覆盖） -->
         <div class="space-y-4 pt-2 border-t border-slate-200 dark:border-slate-700">
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                邮件标题（可编辑）
-              </label>
-              <div class="flex items-center gap-2">
-                <button
-                  id="btn-reset-subject"
-                  title="用当前模板 + 产品名重新生成"
-                  class="hidden px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
-                >
-                  ↺ 重置
-                </button>
-                <button
-                  data-copy="preview-subject"
-                  data-copy-label="subject"
-                  class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
-                >
-                  📋 复制邮件标题
-                </button>
-              </div>
-            </div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+              邮件标题（可编辑）
+            </label>
             <input
               id="preview-subject"
               type="text"
@@ -235,33 +217,30 @@
               placeholder="输入产品名后这里显示最终标题"
               class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
             />
-            <p class="mt-1 text-xs text-slate-400 dark:text-slate-500 min-h-[1rem]">
-              <span data-dirty-hint-for="subject" class="hidden text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
-            </p>
+            <!-- 按钮放 textarea 下方这一行，避免修改时按钮出现导致 label 行重排 -->
+            <div class="mt-2 flex items-center gap-2 min-h-[2rem]">
+              <button
+                id="btn-reset-subject"
+                title="用当前模板 + 产品名重新生成"
+                class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
+              >
+                ↺ 重置
+              </button>
+              <span data-dirty-hint-for="subject" class="hidden text-xs text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
+              <button
+                data-copy="preview-subject"
+                data-copy-label="subject"
+                class="copy-btn ml-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
+              >
+                📋 复制邮件标题
+              </button>
+            </div>
           </div>
 
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                邮件内容（可编辑）
-              </label>
-              <div class="flex items-center gap-2">
-                <button
-                  id="btn-reset-body"
-                  title="用当前模板 + 产品名重新生成"
-                  class="hidden px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
-                >
-                  ↺ 重置
-                </button>
-                <button
-                  data-copy="preview-body"
-                  data-copy-label="body"
-                  class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
-                >
-                  📋 复制邮件内容
-                </button>
-              </div>
-            </div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+              邮件内容（可编辑）
+            </label>
             <textarea
               id="preview-body"
               data-pristine="true"
@@ -269,9 +248,24 @@
               placeholder="输入产品名后这里显示最终正文"
               class="preview-body w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500 overflow-hidden resize-none"
             ></textarea>
-            <p class="mt-1 text-xs text-slate-400 dark:text-slate-500 min-h-[1rem]">
-              <span data-dirty-hint-for="body" class="hidden text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
-            </p>
+            <!-- 按钮放 textarea 下方这一行，避免修改时按钮出现导致 label 行重排 -->
+            <div class="mt-2 flex items-center gap-2 min-h-[2rem]">
+              <button
+                id="btn-reset-body"
+                title="用当前模板 + 产品名重新生成"
+                class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
+              >
+                ↺ 重置
+              </button>
+              <span data-dirty-hint-for="body" class="hidden text-xs text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
+              <button
+                data-copy="preview-body"
+                data-copy-label="body"
+                class="copy-btn ml-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
+              >
+                📋 复制邮件内容
+              </button>
+            </div>
           </div>
         </div>
 
