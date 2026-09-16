@@ -1,0 +1,17 @@
+{
+  "name": "self-media-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "个人独用的工具集合 —— 点开即用，离线可用。",
+  "scripts": {
+    "start": "node server/dev.js",
+    "dev": "node server/dev.js",
+    "serve": "node server/dev.js"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

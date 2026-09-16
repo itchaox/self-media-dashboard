@@ -120,4 +120,31 @@
     recent: { track, getAll: getRecent, setAll: setRecent },
     theme: { get: () => getStoredTheme() || getSystemTheme(), set: setTheme, toggle: toggleTheme },
   };
+
+  // ---------- 热更新（开发模式） ----------
+  // 仅在 http://localhost / http://127.0.0.1 下启用；
+  // 双击 file:// 打开时直接跳过，确保 fallback 仍可用。
+  (function enableHotReload() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+    if (!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(location.hostname)) return;
+
+    let es;
+    try { es = new EventSource('/__events'); } catch (_) { return; }
+
+    const myPath = location.pathname; // 例 "/index.html" 或 "/tools/blank-line-remover.html"
+
+    es.addEventListener('reload', (ev) => {
+      let msg;
+      try { msg = JSON.parse(ev.data); } catch (_) { return; }
+      const paths = Array.isArray(msg.paths) ? msg.paths : [];
+      const shouldReload = paths.some(p =>
+        p === myPath || p.endsWith('.css') || p.endsWith('.js')
+      );
+      if (shouldReload) location.reload();
+    });
+
+    // 静默处理断线：EventSource 默认会按 retry 自动重连，
+    // 不打 console.error，避免用户切回 file:// 打开时被误以为是 SMD bug。
+    es.onerror = () => {};
+  })();
 })();
