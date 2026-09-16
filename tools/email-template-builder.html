@@ -217,23 +217,25 @@
               placeholder="输入产品名后这里显示最终标题"
               class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
             />
-            <!-- 按钮放 textarea 下方这一行，避免修改时按钮出现导致 label 行重排 -->
-            <div class="mt-2 flex items-center gap-2 min-h-[2rem]">
+            <!-- 按钮放 textarea 下方这一行，左组 dirty 提示，右组 重置+复制 -->
+            <div class="mt-2 flex items-center justify-between gap-2 min-h-[2rem]">
               <span data-dirty-hint-for="subject" class="hidden text-xs text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
-              <button
-                id="btn-reset-subject"
-                title="用当前模板 + 产品名重新生成"
-                class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
-              >
-                ↺ 重置
-              </button>
-              <button
-                data-copy="preview-subject"
-                data-copy-label="subject"
-                class="copy-btn ml-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
-              >
-                📋 复制邮件标题
-              </button>
+              <div class="flex items-center gap-2 ml-auto">
+                <button
+                  id="btn-reset-subject"
+                  title="用当前模板 + 产品名重新生成"
+                  class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
+                >
+                  ↺ 重置
+                </button>
+                <button
+                  data-copy="preview-subject"
+                  data-copy-label="subject"
+                  class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
+                >
+                  📋 复制邮件标题
+                </button>
+              </div>
             </div>
           </div>
 
@@ -248,23 +250,25 @@
               style="height: 32rem;"
               class="preview-body w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
             ></textarea>
-            <!-- 按钮放 textarea 下方这一行，避免修改时按钮出现导致 label 行重排 -->
-            <div class="mt-2 flex items-center gap-2 min-h-[2rem]">
+            <!-- 按钮放 textarea 下方这一行，左组 dirty 提示，右组 重置+复制 -->
+            <div class="mt-2 flex items-center justify-between gap-2 min-h-[2rem]">
               <span data-dirty-hint-for="body" class="hidden text-xs text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
-              <button
-                id="btn-reset-body"
-                title="用当前模板 + 产品名重新生成"
-                class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
-              >
-                ↺ 重置
-              </button>
-              <button
-                data-copy="preview-body"
-                data-copy-label="body"
-                class="copy-btn ml-auto px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
-              >
-                📋 复制邮件内容
-              </button>
+              <div class="flex items-center gap-2 ml-auto">
+                <button
+                  id="btn-reset-body"
+                  title="用当前模板 + 产品名重新生成"
+                  class="hidden px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
+                >
+                  ↺ 重置
+                </button>
+                <button
+                  data-copy="preview-body"
+                  data-copy-label="body"
+                  class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
+                >
+                  📋 复制邮件内容
+                </button>
+              </div>
             </div>
           </div>
         </div>
