@@ -244,9 +244,8 @@
             <textarea
               id="preview-body"
               data-pristine="true"
-              rows="10"
               placeholder="输入产品名后这里显示最终正文"
-              class="preview-body w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500 overflow-hidden resize-none"
+              class="preview-body w-full h-64 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
             ></textarea>
             <!-- 按钮放 textarea 下方这一行，避免修改时按钮出现导致 label 行重排 -->
             <div class="mt-2 flex items-center gap-2 min-h-[2rem]">
@@ -296,14 +295,9 @@
         transform: translate(-50%, 0);
       }
 
-      /* 邮件正文 textarea：禁用手动拖拽改高度、隐藏滚动条，让 JS 自动撑开 */
+      /* 邮件正文 textarea：固定高度，内容超出时显示内部滚动条 */
       .preview-body {
         resize: none;
-        overflow: hidden;
-      }
-      /* WebKit 浏览器强制隐藏滚动条 */
-      .preview-body::-webkit-scrollbar {
-        display: none;
       }
     </style>
 
@@ -449,7 +443,6 @@
           }
           if (previewB.getAttribute('data-pristine') === 'true') {
             previewB.value = renderedBody;
-            autosizeBody();
           }
         }
 
@@ -489,30 +482,6 @@
 
         previewS.addEventListener('input', () => markDirtyIfChanged(previewS));
         previewB.addEventListener('input', () => markDirtyIfChanged(previewB));
-
-        // 邮件正文 textarea 自动撑高：内容多少展示多少
-        // 注意：用户修改时滚动位置不能丢。用 delta 法保持视觉稳定：
-        //   1) 记录旧 scrollTop / 旧高度
-        //   2) 临时 height='auto' 拿到新 scrollHeight
-        //   3) 把"高度变化量 delta"补偿回 scrollTop
-        function autosizeBody() {
-          const oldTop    = previewB.scrollTop;
-          const oldHeight = previewB.offsetHeight;
-
-          previewB.style.height = 'auto';
-          const newScrollHeight = previewB.scrollHeight;
-          const newHeight = Math.max(newScrollHeight, oldHeight);
-          previewB.style.height = newHeight + 'px';
-
-          // 内容增长时，滚动条需要同步往下走 delta 才能保持视觉位置不变
-          const delta = newScrollHeight - oldHeight;
-          if (delta > 0) {
-            previewB.scrollTop = oldTop + delta;
-          } else {
-            previewB.scrollTop = oldTop;
-          }
-        }
-        previewB.addEventListener('input', autosizeBody);
 
         // 重置按钮：清掉 dirty，按当前模板 + 产品名重新生成
         function resetField(textarea) {
