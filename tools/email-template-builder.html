@@ -247,12 +247,9 @@
               <span class="text-slate-400 dark:text-slate-500 text-xs">输入产品名后这里显示最终正文</span>
             </div>
           </div>
-
-          <p
-            id="gen-status"
-            class="text-xs text-slate-500 dark:text-slate-400 min-h-[1rem]"
-          ></p>
         </div>
+
+        <!-- 未设置模板的提示 -->
 
         <!-- 未设置模板的提示 -->
         <div
@@ -263,6 +260,22 @@
         </div>
       </section>
     </main>
+
+    <!-- ============ 浮动 Toast 弹窗 ============ -->
+    <div
+      id="gen-toast"
+      role="status"
+      aria-live="polite"
+      class="fixed top-8 left-1/2 -translate-x-1/2 -translate-y-4 px-6 py-3 rounded-full bg-slate-900/85 dark:bg-slate-100/90 text-white dark:text-slate-900 text-sm font-medium shadow-2xl backdrop-blur-md border border-emerald-400/40 opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2"
+    ></div>
+
+    <style>
+      /* Toast 弹出动画（Tailwind CDN 不支持 group-data 复合状态，这里用原生 CSS 补充） */
+      #gen-toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    </style>
 
     <script src="../assets/js/common.js"></script>
     <script>
@@ -285,7 +298,7 @@
         const gProduct     = $('g-product');
         const previewS     = $('preview-subject');
         const previewB     = $('preview-body');
-        const genStatus    = $('gen-status');
+        const genToast     = $('gen-toast');
         const noTplHint    = $('no-template-hint');
 
         const STORAGE_KEY = 'smd.emailTemplates.v2';
@@ -449,16 +462,23 @@
         });
 
         function showGenStatus(msg, isError) {
-          genStatus.textContent = msg;
-          genStatus.className = 'text-xs min-h-[1rem] ' +
-            (isError
-              ? 'text-rose-600 dark:text-rose-400'
-              : 'text-emerald-600 dark:text-emerald-400');
-          // 2.5s 自动消失
+          // 错误用玫瑰色边框，成功用 emerald 边框（已在 HTML 上预设 emerald）
+          genToast.textContent = msg;
+          if (isError) {
+            genToast.classList.remove('border-emerald-400/40');
+            genToast.classList.add('border-rose-400/60');
+          } else {
+            genToast.classList.remove('border-rose-400/60');
+            genToast.classList.add('border-emerald-400/40');
+          }
+          // 触发淡入 + 上滑
+          genToast.classList.add('show');
+          // 2.5s 后自动消失
           clearTimeout(showGenStatus._t);
           showGenStatus._t = setTimeout(() => {
-            genStatus.textContent = '';
-            genStatus.className = 'text-xs text-slate-500 dark:text-slate-400 min-h-[1rem]';
+            genToast.classList.remove('show');
+            // 动画结束后再清空文本（避免动画过程中闪烁）
+            setTimeout(() => { genToast.textContent = ''; }, 300);
           }, 2500);
         }
 
