@@ -120,7 +120,10 @@
             <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50">编辑模板</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
               用
-              <code class="font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-sky-600 dark:text-sky-300">{{占位符}}</code>
+              <code
+                class="font-mono px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-sky-600 dark:text-sky-300"
+                >{{占位符}}</code
+              >
               标记将来要被替换的产品名。例如：
               <code class="font-mono text-slate-600 dark:text-slate-300">商务合作 × {{豆包}}</code>
               。
@@ -129,32 +132,39 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            标题模板
-          </label>
-          <textarea
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"> 标题模板 </label>
+          <input
             id="t-subject"
-            rows="2"
             placeholder="例：【AI 自媒体博主】爱听书的程序员阿超 × {{豆包}} 合作意向"
             class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-          ></textarea>
+          ></input>
           <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
-            检测到 <span id="t-count-subject" class="font-medium text-sky-600 dark:text-sky-300">0</span> 个占位符
+            检测到
+            <span
+              id="t-count-subject"
+              class="font-medium text-sky-600 dark:text-sky-300"
+              >0</span
+            >
+            个占位符
           </p>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            内容模板
-          </label>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"> 内容模板 </label>
           <textarea
             id="t-body"
-            rows="10"
+            rows="25"
             placeholder="例：您好：&#10;&#10;我是阿超，专注...&#10;&#10;期待与 {{豆包}} 合作！"
             class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500"
           ></textarea>
           <p class="mt-1 text-xs text-slate-400 dark:text-slate-500">
-            检测到 <span id="t-count-body" class="font-medium text-sky-600 dark:text-sky-300">0</span> 个占位符
+            检测到
+            <span
+              id="t-count-body"
+              class="font-medium text-sky-600 dark:text-sky-300"
+              >0</span
+            >
+            个占位符
           </p>
         </div>
 
@@ -187,19 +197,19 @@
           <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-50">生成邮件</h2>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
             输入产品名字，实时替换模板里的
-            <code class="font-mono px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-sky-600 dark:text-sky-300">{{占位符}}</code>
+            <code class="font-mono px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-sky-600 dark:text-sky-300"
+              >{{占位符}}</code
+            >
             。
           </p>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            自建产品名字
-          </label>
+          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5"> 自荐产品名字 </label>
           <input
             id="g-product"
             type="text"
-            placeholder="例：豆包工作 / 某某产品"
+            placeholder="例：豆包"
             class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
         </div>
@@ -219,7 +229,11 @@
             />
             <!-- 按钮放 textarea 下方这一行，左组 dirty 提示，右组 重置+复制 -->
             <div class="mt-2 flex items-center justify-between gap-2 min-h-[2rem]">
-              <span data-dirty-hint-for="subject" class="hidden text-xs text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
+              <span
+                data-dirty-hint-for="subject"
+                class="hidden text-xs text-amber-600 dark:text-amber-400"
+                >✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span
+              >
               <div class="flex items-center gap-2 ml-auto">
                 <button
                   id="btn-reset-subject"
@@ -247,12 +261,16 @@
               id="preview-body"
               data-pristine="true"
               placeholder="输入产品名后这里显示最终正文"
-              style="height: 32rem;"
+              style="height: 32rem"
               class="preview-body w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
             ></textarea>
             <!-- 按钮放 textarea 下方这一行，左组 dirty 提示，右组 重置+复制 -->
             <div class="mt-2 flex items-center justify-between gap-2 min-h-[2rem]">
-              <span data-dirty-hint-for="body" class="hidden text-xs text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
+              <span
+                data-dirty-hint-for="body"
+                class="hidden text-xs text-amber-600 dark:text-amber-400"
+                >✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span
+              >
               <div class="flex items-center gap-2 ml-auto">
                 <button
                   id="btn-reset-body"
@@ -314,21 +332,21 @@
         const $ = (id) => document.getElementById(id);
 
         // ---------- 元素 ----------
-        const modeTabs     = document.querySelectorAll('.mode-tab');
-        const panelEdit    = $('panel-edit');
-        const panelGen     = $('panel-generate');
+        const modeTabs = document.querySelectorAll('.mode-tab');
+        const panelEdit = $('panel-edit');
+        const panelGen = $('panel-generate');
 
-        const tSubject     = $('t-subject');
-        const tBody        = $('t-body');
-        const tCountS      = $('t-count-subject');
-        const tCountB      = $('t-count-body');
-        const tplStatus    = $('tpl-status');
+        const tSubject = $('t-subject');
+        const tBody = $('t-body');
+        const tCountS = $('t-count-subject');
+        const tCountB = $('t-count-body');
+        const tplStatus = $('tpl-status');
 
-        const gProduct     = $('g-product');
-        const previewS     = $('preview-subject');
-        const previewB     = $('preview-body');
-        const genToast     = $('gen-toast');
-        const noTplHint    = $('no-template-hint');
+        const gProduct = $('g-product');
+        const previewS = $('preview-subject');
+        const previewB = $('preview-body');
+        const genToast = $('gen-toast');
+        const noTplHint = $('no-template-hint');
 
         const STORAGE_KEY = 'smd.emailTemplates.v2';
 
@@ -350,7 +368,9 @@
         function readTemplate() {
           try {
             return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null;
-          } catch (_) { return null; }
+          } catch (_) {
+            return null;
+          }
         }
         function writeTemplate(data) {
           try {
@@ -363,10 +383,11 @@
 
         // ---------- 模式切换 ----------
         function setMode(mode) {
-          modeTabs.forEach(tab => {
+          modeTabs.forEach((tab) => {
             const active = tab.getAttribute('data-mode') === mode;
             tab.setAttribute('aria-selected', active ? 'true' : 'false');
-            tab.className = 'mode-tab px-4 py-1.5 rounded-lg text-sm font-medium transition ' +
+            tab.className =
+              'mode-tab px-4 py-1.5 rounded-lg text-sm font-medium transition ' +
               (active
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-50 shadow-sm'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200');
@@ -381,7 +402,7 @@
             updatePreview();
           }
         }
-        modeTabs.forEach(tab => {
+        modeTabs.forEach((tab) => {
           tab.addEventListener('click', () => setMode(tab.getAttribute('data-mode')));
         });
 
@@ -389,7 +410,7 @@
         function loadIntoEditor() {
           const tpl = readTemplate();
           tSubject.value = tpl?.subject || '';
-          tBody.value    = tpl?.body    || '';
+          tBody.value = tpl?.body || '';
           updatePlaceholderCounts();
         }
 
@@ -403,15 +424,14 @@
 
         function showTplStatus(msg, isError) {
           tplStatus.textContent = msg;
-          tplStatus.className = 'text-xs min-h-[1rem] ml-2 ' +
-            (isError
-              ? 'text-rose-600 dark:text-rose-400'
-              : 'text-emerald-600 dark:text-emerald-400');
+          tplStatus.className =
+            'text-xs min-h-[1rem] ml-2 ' +
+            (isError ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400');
         }
 
         $('btn-tpl-save').addEventListener('click', () => {
           const subject = tSubject.value;
-          const body    = tBody.value;
+          const body = tBody.value;
           if (!subject.trim() && !body.trim()) {
             showTplStatus('⚠️ 模板为空，先填一些再保存', true);
             return;
@@ -421,7 +441,8 @@
             body,
             updatedAt: Date.now(),
           });
-          if (ok) showTplStatus('✅ 模板已保存'); else showTplStatus('❌ 保存失败', true);
+          if (ok) showTplStatus('✅ 模板已保存');
+          else showTplStatus('❌ 保存失败', true);
         });
 
         $('btn-tpl-clear').addEventListener('click', () => {
@@ -436,12 +457,8 @@
         // ---------- 生成邮件 ----------
         // 根据 dirty 状态决定是否覆盖；只覆盖未脱离（pristine）的字段
         function applyTemplateToPreviews(tpl, product) {
-          const renderedSubject = product
-            ? replacePlaceholders(tpl.subject || '', product)
-            : (tpl.subject || '');
-          const renderedBody = product
-            ? replacePlaceholders(tpl.body || '', product)
-            : (tpl.body || '');
+          const renderedSubject = product ? replacePlaceholders(tpl.subject || '', product) : tpl.subject || '';
+          const renderedBody = product ? replacePlaceholders(tpl.body || '', product) : tpl.body || '';
 
           if (previewS.getAttribute('data-pristine') === 'true') {
             previewS.value = renderedSubject;
@@ -454,10 +471,10 @@
         function setDirty(textarea, dirty) {
           textarea.setAttribute('data-pristine', dirty ? 'false' : 'true');
           const which = textarea === previewS ? 'subject' : 'body';
-          const hint  = document.querySelector(`[data-dirty-hint-for="${which}"]`);
-          const btn   = $(`btn-reset-${which}`);
+          const hint = document.querySelector(`[data-dirty-hint-for="${which}"]`);
+          const btn = $(`btn-reset-${which}`);
           if (hint) hint.classList.toggle('hidden', !dirty);
-          if (btn)  btn.classList.toggle('hidden', !dirty);
+          if (btn) btn.classList.toggle('hidden', !dirty);
         }
 
         function updatePreview() {
@@ -477,10 +494,8 @@
           const tpl = readTemplate();
           if (!tpl) return;
           const which = textarea === previewS ? 'subject' : 'body';
-          const tmplText = which === 'subject' ? (tpl.subject || '') : (tpl.body || '');
-          const rendered = gProduct.value
-            ? replacePlaceholders(tmplText, gProduct.value)
-            : tmplText;
+          const tmplText = which === 'subject' ? tpl.subject || '' : tpl.body || '';
+          const rendered = gProduct.value ? replacePlaceholders(tmplText, gProduct.value) : tmplText;
           // 实际值 vs 模板应生成值，不一致则 dirty
           setDirty(textarea, textarea.value !== rendered);
         }
@@ -506,7 +521,9 @@
               await navigator.clipboard.writeText(text);
               return true;
             }
-          } catch (_) { /* fallback */ }
+          } catch (_) {
+            /* fallback */
+          }
           // Fallback: 隐藏 textarea + execCommand
           const ta = document.createElement('textarea');
           ta.value = text;
@@ -515,22 +532,27 @@
           document.body.appendChild(ta);
           ta.select();
           let ok = false;
-          try { ok = document.execCommand('copy'); } catch (_) {}
+          try {
+            ok = document.execCommand('copy');
+          } catch (_) {}
           document.body.removeChild(ta);
           return ok;
         }
 
-        document.querySelectorAll('.copy-btn').forEach(btn => {
+        document.querySelectorAll('.copy-btn').forEach((btn) => {
           btn.addEventListener('click', async () => {
             const targetId = btn.getAttribute('data-copy');
-            const label    = btn.getAttribute('data-copy-label') || '内容';
-            const text     = $(targetId).textContent;
+            const label = btn.getAttribute('data-copy-label') || '内容';
+            const text = $(targetId).textContent;
             if (!text.trim()) {
               showGenStatus('⚠️ 没有可复制的内容', true);
               return;
             }
             const ok = await copyText(text);
-            showGenStatus(ok ? `✅ 邮件${label === 'subject' ? '标题' : '内容'}复制成功` : '❌ 复制失败，请手动选择', !ok);
+            showGenStatus(
+              ok ? `✅ 邮件${label === 'subject' ? '标题' : '内容'}复制成功` : '❌ 复制失败，请手动选择',
+              !ok,
+            );
           });
         });
 
@@ -551,7 +573,9 @@
           showGenStatus._t = setTimeout(() => {
             genToast.classList.remove('show');
             // 动画结束后再清空文本（避免动画过程中闪烁）
-            setTimeout(() => { genToast.textContent = ''; }, 300);
+            setTimeout(() => {
+              genToast.textContent = '';
+            }, 300);
           }, 2500);
         }
 
