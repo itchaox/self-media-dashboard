@@ -213,9 +213,10 @@
               </label>
               <button
                 data-copy="preview-subject"
-                class="copy-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs transition"
+                data-copy-label="subject"
+                class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
               >
-                📋 复制
+                📋 复制邮件标题
               </button>
             </div>
             <div
@@ -233,9 +234,10 @@
               </label>
               <button
                 data-copy="preview-body"
-                class="copy-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs transition"
+                data-copy-label="body"
+                class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
               >
-                📋 复制
+                📋 复制邮件内容
               </button>
             </div>
             <div
@@ -435,13 +437,14 @@
         document.querySelectorAll('.copy-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
             const targetId = btn.getAttribute('data-copy');
-            const text = $(targetId).textContent;
+            const label    = btn.getAttribute('data-copy-label') || '内容';
+            const text     = $(targetId).textContent;
             if (!text.trim()) {
               showGenStatus('⚠️ 没有可复制的内容', true);
               return;
             }
             const ok = await copyText(text);
-            showGenStatus(ok ? '✅ 已复制到剪贴板' : '❌ 复制失败，请手动选择', !ok);
+            showGenStatus(ok ? `✅ 邮件${label === 'subject' ? '标题' : '内容'}复制成功` : '❌ 复制失败，请手动选择', !ok);
           });
         });
 
