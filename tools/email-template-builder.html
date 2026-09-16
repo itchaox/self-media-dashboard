@@ -228,13 +228,13 @@
                 </button>
               </div>
             </div>
-            <textarea
+            <input
               id="preview-subject"
+              type="text"
               data-pristine="true"
-              rows="2"
               placeholder="输入产品名后这里显示最终标题"
               class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
-            ></textarea>
+            />
             <p class="mt-1 text-xs text-slate-400 dark:text-slate-500 min-h-[1rem]">
               <span data-dirty-hint-for="subject" class="hidden text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
             </p>
@@ -267,7 +267,7 @@
               data-pristine="true"
               rows="10"
               placeholder="输入产品名后这里显示最终正文"
-              class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500"
+              class="preview-body w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500 overflow-hidden resize-none"
             ></textarea>
             <p class="mt-1 text-xs text-slate-400 dark:text-slate-500 min-h-[1rem]">
               <span data-dirty-hint-for="body" class="hidden text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
@@ -300,6 +300,16 @@
       #gen-toast.show {
         opacity: 1;
         transform: translate(-50%, 0);
+      }
+
+      /* 邮件正文 textarea：禁用手动拖拽改高度、隐藏滚动条，让 JS 自动撑开 */
+      .preview-body {
+        resize: none;
+        overflow: hidden;
+      }
+      /* WebKit 浏览器强制隐藏滚动条 */
+      .preview-body::-webkit-scrollbar {
+        display: none;
       }
     </style>
 
@@ -445,6 +455,7 @@
           }
           if (previewB.getAttribute('data-pristine') === 'true') {
             previewB.value = renderedBody;
+            autosizeBody();
           }
         }
 
@@ -484,6 +495,13 @@
 
         previewS.addEventListener('input', () => markDirtyIfChanged(previewS));
         previewB.addEventListener('input', () => markDirtyIfChanged(previewB));
+
+        // 邮件正文 textarea 自动撑高：内容多少展示多少
+        function autosizeBody() {
+          previewB.style.height = 'auto';                 // 先重置才能拿到真实 scrollHeight
+          previewB.style.height = previewB.scrollHeight + 'px';
+        }
+        previewB.addEventListener('input', autosizeBody);
 
         // 重置按钮：清掉 dirty，按当前模板 + 产品名重新生成
         function resetField(textarea) {
