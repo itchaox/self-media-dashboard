@@ -543,7 +543,9 @@
           btn.addEventListener('click', async () => {
             const targetId = btn.getAttribute('data-copy');
             const label = btn.getAttribute('data-copy-label') || '内容';
-            const text = $(targetId).textContent;
+            const el = $(targetId);
+            // 兼容 input / textarea（用 .value）和普通元素（用 .textContent）
+            const text = ('value' in el) ? el.value : el.textContent;
             if (!text.trim()) {
               showGenStatus('⚠️ 没有可复制的内容', true);
               return;
