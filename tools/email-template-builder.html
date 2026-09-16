@@ -497,9 +497,26 @@
         previewB.addEventListener('input', () => markDirtyIfChanged(previewB));
 
         // 邮件正文 textarea 自动撑高：内容多少展示多少
+        // 注意：用户修改时滚动位置不能丢。用 delta 法保持视觉稳定：
+        //   1) 记录旧 scrollTop / 旧高度
+        //   2) 临时 height='auto' 拿到新 scrollHeight
+        //   3) 把"高度变化量 delta"补偿回 scrollTop
         function autosizeBody() {
-          previewB.style.height = 'auto';                 // 先重置才能拿到真实 scrollHeight
-          previewB.style.height = previewB.scrollHeight + 'px';
+          const oldTop    = previewB.scrollTop;
+          const oldHeight = previewB.offsetHeight;
+
+          previewB.style.height = 'auto';
+          const newScrollHeight = previewB.scrollHeight;
+          const newHeight = Math.max(newScrollHeight, oldHeight);
+          previewB.style.height = newHeight + 'px';
+
+          // 内容增长时，滚动条需要同步往下走 delta 才能保持视觉位置不变
+          const delta = newScrollHeight - oldHeight;
+          if (delta > 0) {
+            previewB.scrollTop = oldTop + delta;
+          } else {
+            previewB.scrollTop = oldTop;
+          }
         }
         previewB.addEventListener('input', autosizeBody);
 
