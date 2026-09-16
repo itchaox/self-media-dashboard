@@ -204,48 +204,74 @@
           />
         </div>
 
-        <!-- 实时预览 -->
+        <!-- 实时预览（可编辑：用户可微调，标记为脱离后产品名变化不再覆盖） -->
         <div class="space-y-4 pt-2 border-t border-slate-200 dark:border-slate-700">
           <div>
             <div class="flex items-center justify-between mb-1.5">
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                邮件标题（预览）
+                邮件标题（可编辑）
               </label>
-              <button
-                data-copy="preview-subject"
-                data-copy-label="subject"
-                class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
-              >
-                📋 复制邮件标题
-              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  id="btn-reset-subject"
+                  title="用当前模板 + 产品名重新生成"
+                  class="hidden px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
+                >
+                  ↺ 重置
+                </button>
+                <button
+                  data-copy="preview-subject"
+                  data-copy-label="subject"
+                  class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
+                >
+                  📋 复制邮件标题
+                </button>
+              </div>
             </div>
-            <div
+            <textarea
               id="preview-subject"
-              class="min-h-[3rem] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm whitespace-pre-wrap break-words text-slate-700 dark:text-slate-200"
-            >
-              <span class="text-slate-400 dark:text-slate-500 text-xs">输入产品名后这里显示最终标题</span>
-            </div>
+              data-pristine="true"
+              rows="2"
+              placeholder="输入产品名后这里显示最终标题"
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+            ></textarea>
+            <p class="mt-1 text-xs text-slate-400 dark:text-slate-500 min-h-[1rem]">
+              <span data-dirty-hint-for="subject" class="hidden text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
+            </p>
           </div>
 
           <div>
             <div class="flex items-center justify-between mb-1.5">
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                邮件内容（预览）
+                邮件内容（可编辑）
               </label>
-              <button
-                data-copy="preview-body"
-                data-copy-label="body"
-                class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
-              >
-                📋 复制邮件内容
-              </button>
+              <div class="flex items-center gap-2">
+                <button
+                  id="btn-reset-body"
+                  title="用当前模板 + 产品名重新生成"
+                  class="hidden px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 dark:bg-amber-900/40 dark:hover:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-medium transition"
+                >
+                  ↺ 重置
+                </button>
+                <button
+                  data-copy="preview-body"
+                  data-copy-label="body"
+                  class="copy-btn px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition shadow-sm"
+                >
+                  📋 复制邮件内容
+                </button>
+              </div>
             </div>
-            <div
+            <textarea
               id="preview-body"
-              class="min-h-[12rem] rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono whitespace-pre-wrap break-words text-slate-700 dark:text-slate-200"
-            >
-              <span class="text-slate-400 dark:text-slate-500 text-xs">输入产品名后这里显示最终正文</span>
-            </div>
+              data-pristine="true"
+              rows="10"
+              placeholder="输入产品名后这里显示最终正文"
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-sky-500"
+            ></textarea>
+            <p class="mt-1 text-xs text-slate-400 dark:text-slate-500 min-h-[1rem]">
+              <span data-dirty-hint-for="body" class="hidden text-amber-600 dark:text-amber-400">✋ 你修改过这里，再改产品名将不会覆盖。点 ↺ 重置可重新生成。</span>
+            </p>
           </div>
         </div>
 
@@ -344,6 +370,13 @@
           });
           panelEdit.classList.toggle('hidden', mode !== 'edit');
           panelGen.classList.toggle('hidden', mode !== 'generate');
+
+          // 切到「生成邮件」时，重置两个预览区为 pristine（因为模板可能刚改过）
+          if (mode === 'generate') {
+            setDirty(previewS, false);
+            setDirty(previewB, false);
+            updatePreview();
+          }
         }
         modeTabs.forEach(tab => {
           tab.addEventListener('click', () => setMode(tab.getAttribute('data-mode')));
@@ -398,31 +431,68 @@
         });
 
         // ---------- 生成邮件 ----------
+        // 根据 dirty 状态决定是否覆盖；只覆盖未脱离（pristine）的字段
+        function applyTemplateToPreviews(tpl, product) {
+          const renderedSubject = product
+            ? replacePlaceholders(tpl.subject || '', product)
+            : (tpl.subject || '');
+          const renderedBody = product
+            ? replacePlaceholders(tpl.body || '', product)
+            : (tpl.body || '');
+
+          if (previewS.getAttribute('data-pristine') === 'true') {
+            previewS.value = renderedSubject;
+          }
+          if (previewB.getAttribute('data-pristine') === 'true') {
+            previewB.value = renderedBody;
+          }
+        }
+
+        function setDirty(textarea, dirty) {
+          textarea.setAttribute('data-pristine', dirty ? 'false' : 'true');
+          const which = textarea === previewS ? 'subject' : 'body';
+          const hint  = document.querySelector(`[data-dirty-hint-for="${which}"]`);
+          const btn   = $(`btn-reset-${which}`);
+          if (hint) hint.classList.toggle('hidden', !dirty);
+          if (btn)  btn.classList.toggle('hidden', !dirty);
+        }
+
         function updatePreview() {
           const tpl = readTemplate();
           if (!tpl || (!tpl.subject && !tpl.body)) {
             noTplHint.classList.remove('hidden');
-            previewS.innerHTML = '<span class="text-slate-400 dark:text-slate-500 text-xs">输入产品名后这里显示最终标题</span>';
-            previewB.innerHTML = '<span class="text-slate-400 dark:text-slate-500 text-xs">输入产品名后这里显示最终正文</span>';
+            previewS.value = '';
+            previewB.value = '';
             return;
           }
           noTplHint.classList.add('hidden');
-
-          const product = gProduct.value;
-          const subject = tpl.subject || '';
-          const body    = tpl.body    || '';
-
-          const finalSubject = product
-            ? replacePlaceholders(subject, product)
-            : subject || '<span class="text-slate-400 dark:text-slate-500 text-xs">先在上方输入产品名</span>';
-          const finalBody = product
-            ? replacePlaceholders(body, product)
-            : body || '<span class="text-slate-400 dark:text-slate-500 text-xs">先在上方输入产品名</span>';
-
-          // 用 textContent 安全插入，避免 XSS
-          previewS.textContent = finalSubject;
-          previewB.textContent = finalBody;
+          applyTemplateToPreviews(tpl, gProduct.value);
         }
+
+        // 文本框输入 → 标记为已脱离（除非值恰好和模板生成结果一致——避免选中再退格被误标记）
+        function markDirtyIfChanged(textarea) {
+          const tpl = readTemplate();
+          if (!tpl) return;
+          const which = textarea === previewS ? 'subject' : 'body';
+          const tmplText = which === 'subject' ? (tpl.subject || '') : (tpl.body || '');
+          const rendered = gProduct.value
+            ? replacePlaceholders(tmplText, gProduct.value)
+            : tmplText;
+          // 实际值 vs 模板应生成值，不一致则 dirty
+          setDirty(textarea, textarea.value !== rendered);
+        }
+
+        previewS.addEventListener('input', () => markDirtyIfChanged(previewS));
+        previewB.addEventListener('input', () => markDirtyIfChanged(previewB));
+
+        // 重置按钮：清掉 dirty，按当前模板 + 产品名重新生成
+        function resetField(textarea) {
+          setDirty(textarea, false);
+          updatePreview();
+          textarea.focus();
+        }
+        $('btn-reset-subject').addEventListener('click', () => resetField(previewS));
+        $('btn-reset-body').addEventListener('click', () => resetField(previewB));
 
         gProduct.addEventListener('input', updatePreview);
 
