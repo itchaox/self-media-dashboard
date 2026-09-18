@@ -47,7 +47,7 @@
         color: #e2e8f0;
       }
 
-      /* 顶部面包屑导航（与邮件模板一致：max-w-6xl 居中 + 内部左右分布） */
+      /* 顶部面包屑导航（左对齐布局） */
       .topbar {
         position: sticky;
         top: 0;
@@ -57,9 +57,7 @@
         justify-content: space-between;
         gap: 16px;
         height: 48px;
-        width: 100%;                     /* 撑满父容器，让 max-width 真正生效 */
-        max-width: 72rem;                /* max-w-6xl：与主体面板对齐 */
-        margin: 0 auto;
+        width: 100%;
         padding: 0 16px;
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(8px);
