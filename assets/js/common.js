@@ -91,19 +91,7 @@
       }
     }
 
-    // 3. 首页（和工作台相关页面）渲染"最近使用"角标
-    const recent = getRecent();
-    if (recent.length) {
-      recent.forEach((id, idx) => {
-        const card = document.querySelector(`[data-tool-id="${CSS.escape(id)}"]`);
-        if (!card || card.querySelector('.recent-badge')) return;
-        const badge = document.createElement('span');
-        badge.className = 'recent-badge';
-        badge.textContent = `#${idx + 1}`;
-        badge.title = '最近使用';
-        card.appendChild(badge);
-      });
-    }
+    // 3. 首页不再渲染"最近使用"角标（用户不需要）
 
     // 4. 主题切换按钮：找 [data-theme-toggle] 自动绑定
     document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
