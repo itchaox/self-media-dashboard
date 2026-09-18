@@ -47,14 +47,14 @@
         color: #e2e8f0;
       }
 
-      /* 顶部面包屑导航（居中布局，与邮件模板一致） */
+      /* 顶部面包屑导航（与邮件模板一致：左组导航 + 右组主题按钮） */
       .topbar {
         position: sticky;
         top: 0;
         z-index: 50;
         display: flex;
         align-items: center;
-        justify-content: center;       /* 整组居中 */
+        justify-content: space-between;  /* 左组左对齐，主题按钮贴右 */
         gap: 16px;
         padding: 8px 16px;
         background: rgba(255, 255, 255, 0.85);
