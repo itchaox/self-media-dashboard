@@ -16,17 +16,15 @@
     <!-- 工作台共享样式 + 主题 CSS 变量（不影响本页原有样式） -->
     <link rel="stylesheet" href="../assets/css/common.css" />
     <style>
+      /* ============================================================
+       * 空行去除器 · 样式（与项目整体一致：白色卡片 + 浅色背景）
+       * 紫色（#8b5cf6）保留为主操作色，与 indigo 风格协调
+       * ============================================================ */
+
       :root {
-        --bg-start: #1a1f3a;
-        --bg-end: #0f1419;
         --primary: #8b5cf6;
         --primary-hover: #7c3aed;
-        --border: rgba(139, 92, 246, 0.3);
-        --text-main: #f3f4f6;
-        --text-muted: #9ca3af;
-        --glass-bg: rgba(30, 30, 40, 0.6);
-        --glass-bg-hover: rgba(40, 40, 50, 0.7);
-        --panel-border-radius: 16px;
+        --panel-radius: 16px;
       }
 
       * {
@@ -37,43 +35,143 @@
 
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
-        color: var(--text-main);
+        background: #f8fafc;                          /* 浅色背景 slate-50 */
+        color: #334155;                                /* 主文字 slate-700 */
         min-height: 100vh;
         display: flex;
         flex-direction: column;
-        padding: 2rem;
+        padding: 0;                                    /* 让 sticky nav 自带 padding */
+      }
+      html.dark body {
+        background: #0f172a;                          /* 深色背景 slate-900 */
+        color: #e2e8f0;
       }
 
-      /* Glassmorphism utility */
+      /* 顶部面包屑导航（与商单邮件模板一致） */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 16px;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #e2e8f0;
+      }
+      html.dark .topbar {
+        background: rgba(15, 23, 42, 0.85);
+        border-bottom-color: #334155;
+      }
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+      .topbar-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s ease;
+      }
+      .topbar-back:hover {
+        color: var(--primary);
+      }
+      .topbar-sep {
+        color: #cbd5e1;
+      }
+      html.dark .topbar-sep {
+        color: #475569;
+      }
+      .topbar-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #0f172a;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      html.dark .topbar-title {
+        color: #f8fafc;
+      }
+      .topbar-theme-btn {
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+        border-radius: 8px;
+        padding: 4px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        line-height: 1;
+        transition: background 0.2s ease;
+      }
+      .topbar-theme-btn:hover {
+        background: #e2e8f0;
+      }
+      html.dark .topbar-theme-btn {
+        background: #1e293b;
+        border-color: #334155;
+        color: #cbd5e1;
+      }
+
+      /* 白卡面板（替代 glass） */
+      .panel-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--panel-radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+      html.dark .panel-card {
+        background: #1e293b;
+        border-color: #334155;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Glass utility（保留以兼容 class="panel glass" 的旧元素） */
       .glass {
-        background: var(--glass-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--border);
-        border-radius: var(--panel-border-radius);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: var(--panel-radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      }
+      html.dark .glass {
+        background: #1e293b;
+        border-color: #334155;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       }
 
-      /* Header */
+      /* Header（居中标题） */
       header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin: 2rem auto 1rem;
+        max-width: 1400px;
+        width: 100%;
+        padding: 0 1rem;
       }
 
       header h1 {
         font-size: 2.5rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
-        background: linear-gradient(to right, #fff, var(--primary));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        color: #0f172a;
+      }
+      html.dark header h1 {
+        color: #f8fafc;
       }
 
       header p {
-        color: var(--text-muted);
+        color: #64748b;
         font-size: 1.1rem;
+      }
+      html.dark header p {
+        color: #94a3b8;
       }
 
       /* Main Workspace */
@@ -83,7 +181,8 @@
         gap: 1.5rem;
         max-width: 1400px;
         width: 100%;
-        margin: 0 auto;
+        margin: 0 auto 2rem;
+        padding: 0 1rem;
       }
 
       .panel {
@@ -94,21 +193,21 @@
         transition: border-color 0.3s ease;
       }
 
-      .panel:focus-within {
-        /* border-color: var(--primary); */
-        /* box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.2); */
-      }
-
       .panel-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 1rem 1.5rem;
-        background: rgba(0, 0, 0, 0.2);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
         font-weight: 500;
         font-size: 0.95rem;
-        color: #d1d5db;
+        color: #475569;
+      }
+      html.dark .panel-header {
+        background: #0f172a;
+        border-bottom-color: #334155;
+        color: #cbd5e1;
       }
 
       textarea {
@@ -117,16 +216,19 @@
         background: transparent;
         border: none;
         outline: none;
-        color: var(--text-main);
+        color: #0f172a;
         padding: 1.5rem;
         font-family: 'Fira Code', Consolas, Monaco, monospace;
         font-size: 14px;
         line-height: 1.6;
         resize: none;
       }
+      html.dark textarea {
+        color: #e2e8f0;
+      }
 
       textarea::placeholder {
-        color: rgba(156, 163, 175, 0.5);
+        color: rgba(148, 163, 184, 0.6);
       }
 
       /* Custom Scrollbar */
@@ -137,12 +239,16 @@
         background: transparent;
       }
       textarea::-webkit-scrollbar-thumb {
-        background: rgba(139, 92, 246, 0.3);
+        background: #cbd5e1;
         border-radius: 5px;
-        border: 2px solid var(--glass-bg);
+        border: 2px solid #ffffff;
+      }
+      html.dark textarea::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-color: #1e293b;
       }
       textarea::-webkit-scrollbar-thumb:hover {
-        background: rgba(139, 92, 246, 0.6);
+        background: var(--primary);
       }
 
       /* Controls */
@@ -166,41 +272,49 @@
         font-size: 24px;
         cursor: pointer;
         transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         outline: none;
+      }
+      html.dark .btn-circle {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       }
 
       .btn-circle.primary {
         background: var(--primary);
         color: white;
       }
-
       .btn-circle.primary:hover {
         background: var(--primary-hover);
         transform: scale(1.1);
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
       }
-
       .btn-circle.primary:active {
         transform: scale(0.95);
       }
 
       .btn-circle.secondary {
-        background: #374151;
-        color: #d1d5db;
+        background: #e2e8f0;
+        color: #475569;
       }
-
+      html.dark .btn-circle.secondary {
+        background: #334155;
+        color: #cbd5e1;
+      }
       .btn-circle.secondary:hover {
-        background: #4b5563;
-        color: white;
+        background: #cbd5e1;
+        color: #334155;
         transform: scale(1.1);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+      html.dark .btn-circle.secondary:hover {
+        background: #475569;
+        color: #f1f5f9;
       }
 
       .btn-small {
-        background: rgba(139, 92, 246, 0.15);
-        color: #e2e8f0;
-        border: 1px solid var(--border);
+        background: rgba(139, 92, 246, 0.08);
+        color: var(--primary);
+        border: 1px solid rgba(139, 92, 246, 0.3);
         padding: 6px 14px;
         border-radius: 8px;
         font-size: 12px;
@@ -208,10 +322,8 @@
         cursor: pointer;
         transition: all 0.2s ease;
       }
-
       .btn-small:hover {
-        background: rgba(139, 92, 246, 0.3);
-        color: #fff;
+        background: rgba(139, 92, 246, 0.15);
         transform: translateY(-1px);
       }
 
@@ -220,24 +332,29 @@
         display: flex;
         justify-content: center;
         gap: 2rem;
-        margin: 2rem auto 0;
+        margin: 2rem auto 2rem;
         padding: 1.5rem 3rem;
         max-width: fit-content;
       }
 
       .stat-box {
-        background: rgba(15, 20, 25, 0.8);
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 12px;
         padding: 1rem 2rem;
         text-align: center;
         min-width: 140px;
         transition: transform 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
       }
-
+      html.dark .stat-box {
+        background: #1e293b;
+        border-color: #334155;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
       .stat-box:hover {
         transform: translateY(-2px);
-        border-color: rgba(139, 92, 246, 0.2);
+        border-color: rgba(139, 92, 246, 0.4);
       }
 
       .stat-value {
@@ -246,33 +363,35 @@
         color: var(--primary);
         margin-top: 8px;
         font-family: 'Fira Code', monospace;
-        text-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
       }
 
       .stat-label {
-        color: var(--text-muted);
+        color: #64748b;
         font-size: 13px;
         font-weight: 500;
         letter-spacing: 0.5px;
       }
+      html.dark .stat-label {
+        color: #94a3b8;
+      }
 
-      /* Toast */
+      /* Toast（白底 + 紫色边框，与项目一致） */
       .toast {
         position: fixed;
         top: 30px;
         left: 50%;
         transform: translateX(-50%) translateY(-20px);
-        background: rgba(30, 30, 40, 0.85);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 1px solid var(--primary);
-        color: #fff;
+        color: #0f172a;
         padding: 14px 28px;
         border-radius: 50px;
         font-size: 15px;
         font-weight: 500;
         box-shadow:
-          0 10px 30px rgba(0, 0, 0, 0.3),
+          0 10px 30px rgba(0, 0, 0, 0.08),
           0 0 15px rgba(139, 92, 246, 0.2);
         opacity: 0;
         visibility: hidden;
@@ -283,7 +402,10 @@
         align-items: center;
         gap: 8px;
       }
-
+      html.dark .toast {
+        background: rgba(30, 41, 59, 0.95);
+        color: #f1f5f9;
+      }
       .toast.show {
         opacity: 1;
         visibility: visible;
@@ -316,39 +438,10 @@
     </style>
   </head>
   <body>
-    <!-- 工作台顶部导航：返回 / 工具名 / 主题切换 -->
-    <nav
-      style="
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 8px 16px;
-        margin: -2rem -2rem 1.5rem;
-        background: rgba(15, 20, 25, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-      "
-    >
-      <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
-        <a
-          href="../index.html"
-          style="
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: #9ca3af;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s ease;
-          "
-          onmouseover="this.style.color='#8b5cf6'"
-          onmouseout="this.style.color='#9ca3af'"
-        >
+    <!-- 工作台顶部导航：返回 / 工具名 / 主题切换（与商单邮件模板一致） -->
+    <nav class="topbar">
+      <div class="topbar-left">
+        <a href="../index.html" class="topbar-back">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -366,34 +459,14 @@
           </svg>
           <span>返回工作台</span>
         </a>
-        <span style="color: rgba(156, 163, 175, 0.4);">/</span>
-        <span
-          style="
-            font-size: 14px;
-            font-weight: 500;
-            color: #f3f4f6;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          "
-          >空行去除器</span
-        >
+        <span class="topbar-sep">/</span>
+        <span class="topbar-title">空行去除器</span>
       </div>
       <button
         data-theme-toggle
         aria-label="切换主题"
         title="切换主题"
-        class="theme-toggle-icon"
-        style="
-          background: rgba(139, 92, 246, 0.15);
-          border: 1px solid rgba(139, 92, 246, 0.3);
-          color: #e2e8f0;
-          border-radius: 8px;
-          padding: 4px 10px;
-          font-size: 14px;
-          cursor: pointer;
-          line-height: 1;
-        "
+        class="topbar-theme-btn"
       >
         🌗
       </button>
