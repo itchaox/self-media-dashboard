@@ -47,22 +47,28 @@
         color: #e2e8f0;
       }
 
-      /* 顶部面包屑导航（与邮件模板一致：左组导航 + 右组主题按钮） */
+      /* 顶部面包屑导航（与邮件模板一致：宽度撑满 + 内部左右分布） */
       .topbar {
         position: sticky;
         top: 0;
         z-index: 50;
         display: flex;
         align-items: center;
-        justify-content: space-between;  /* 左组左对齐，主题按钮贴右 */
+        justify-content: space-between;
         gap: 16px;
-        padding: 8px 16px;
+        height: 48px;
+        width: 100%;
+        padding: 0 16px;                  /* 移动端 16px */
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         border-bottom: 1px solid #e2e8f0;
       }
       .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+      @media (min-width: 640px) {
+        .topbar { padding: 0 24px; }    /* sm: 与邮件模板对齐 */
+      }
       html.dark .topbar {
         background: rgba(15, 23, 42, 0.85);
         border-bottom-color: #334155;
