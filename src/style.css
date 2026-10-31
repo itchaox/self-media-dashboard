@@ -1,0 +1,26 @@
+@import './legacy/blank-line-remover.css';
+@import './legacy/email-template-builder.css';
+@tailwind utilities;
+body{margin:0;background:#f7f9fc;color:#172033;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif}.dark body{background:#101827;color:#e5e7eb}a{color:inherit;text-decoration:none}.app-header{padding:28px max(24px,calc((100vw - 1120px)/2));display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #8899aa22}.app-header>a{font-size:24px;font-weight:600}.app-main{max-width:1120px;margin:auto;padding:36px 24px}.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.tool-icon{font-size:28px;color:#059669}.tool-grid p,.page-title p{color:#7c8ba1;line-height:1.7}.page-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.filters{display:flex;gap:12px;margin-bottom:24px}.filters>.ant-select{min-width:180px}.prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}.prompt-content{white-space:pre-wrap;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}.hidden{display:none!important}.legacy input,.legacy textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #d9dfe8;border-radius:10px;background:transparent;color:inherit}.legacy .topbar{display:none}.legacy label{display:block}.legacy .space-y-6>*+*{margin-top:24px}.legacy .space-y-3>*+*{margin-top:12px}.legacy .flex{display:flex;gap:12px}.legacy .justify-between{justify-content:space-between}.legacy .rounded-2xl{padding:24px;border:1px solid #d9dfe8;border-radius:16px;margin-bottom:20px}.legacy h2{font-size:20px}.legacy .text-xs{font-size:12px}.legacy .mb-2{margin-bottom:8px}.legacy .mt-3{margin-top:12px}@media(max-width:700px){.tool-grid,.prompt-grid{grid-template-columns:1fr}.page-title{align-items:flex-start;gap:12px}.filters{flex-direction:column}}
+
+.tool-grid .ant-card{height:100%}
+/* 空行去除器：左右文本区约为原来的两倍高度。 */
+.blank-line-remover .workspace .ant-input{height:720px;min-height:720px;resize:vertical}
+.blank-line-remover .controls{gap:14px;min-width:84px}
+.blank-line-remover .controls .ant-btn{width:72px;height:72px;padding:8px;border-radius:18px;font-size:14px;font-weight:600;box-shadow:0 3px 10px #0f172a18}
+.blank-line-remover .controls .ant-btn>span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.25}
+.blank-line-remover .controls .ant-btn>span>span:first-child{font-size:23px}
+.blank-line-remover .workspace .panel-header{padding:14px 18px}
+@media(max-width:900px){.blank-line-remover .workspace .ant-input{height:520px;min-height:520px}.blank-line-remover .controls{min-width:0;justify-content:center;flex-direction:row}}
+
+.tool-grid .tool-icon{display:flex;align-items:center;justify-content:center;width:64px;height:64px;margin-bottom:24px;border-radius:18px;font-size:31px;line-height:1}
+.tool-grid .tool-icon-blank-line-remover{color:#7c3aed;background:#f1eaff}
+.tool-grid .tool-icon-email-template-builder{color:#0284c7;background:#e2f3ff}
+.tool-grid .tool-icon-prompt-manager{color:#059669;background:#ddf7eb}
+.dark .tool-grid .tool-icon-blank-line-remover{background:#35245c;color:#c4b5fd}
+.dark .tool-grid .tool-icon-email-template-builder{background:#173d57;color:#7dd3fc}
+.dark .tool-grid .tool-icon-prompt-manager{background:#184839;color:#6ee7b7}
+
+.tool-grid .tool-heading{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.tool-grid .tool-heading h3{margin:0}
+.tool-grid .tool-heading .tool-icon{flex:none;margin-bottom:0}

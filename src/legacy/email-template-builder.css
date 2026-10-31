@@ -1,0 +1,14 @@
+@scope (.email-template-builder) {
+
+      /* Toast 弹出动画（Tailwind CDN 不支持 group-data 复合状态，这里用原生 CSS 补充） */
+      #gen-toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      /* 邮件正文 textarea：固定高度，内容超出时显示内部滚动条 */
+      .preview-body {
+        resize: none;
+      }
+    
+}
